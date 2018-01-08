@@ -1,5 +1,7 @@
 # Battlemap
 
+[![Build Status](https://travis-ci.org/rschaden/battlemap.svg?branch=master)](https://travis-ci.org/rschaden/battlemap)
+
 This will eventually provide a visualization of battles on an OpenStreetMap.
 The topic was chosen because it combines my interests in history, geography
 and spatial databases. It was inspired by a similar project by Nodegoat:
