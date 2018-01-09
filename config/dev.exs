@@ -13,7 +13,6 @@ config :battlemap, BattlemapWeb.Endpoint,
   check_origin: false,
   watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
                     cd: Path.expand("../assets", __DIR__)]]
-
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed
@@ -51,6 +50,7 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :battlemap, Battlemap.Repo,
   adapter: Ecto.Adapters.Postgres,
+  types: Battlemap.PostgresTypes,
   username: "postgres",
   password: "postgres",
   database: "battlemap_dev",
