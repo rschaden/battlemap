@@ -10,8 +10,10 @@ config :battlemap, BattlemapWeb.Endpoint,
 config :logger, level: :warn
 
 # Configure your database
+
 config :battlemap, Battlemap.Repo,
   adapter: Ecto.Adapters.Postgres,
+  types: Battlemap.PostgresTypes,
   username: "postgres",
   password: "postgres",
   database: "battlemap_test",
