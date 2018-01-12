@@ -59,6 +59,15 @@ config :logger, level: :info
 #     config :battlemap, BattlemapWeb.Endpoint, server: true
 #
 
-# Finally import the config/prod.secret.exs
-# which should be versioned separately.
-import_config "prod.secret.exs"
+config :battlemap, BattlemapWeb.Endpoint,
+  secret_key_base: System.get_env("SECRET_KEY_BASE")
+
+# Configure your database
+config :battlemap, Battlemap.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  types: Battlemap.PostgresTypes,
+  username: System.get_env("POSTGRES_USER"),
+  password: System.get_env("POSTGRES_PASS"),
+  database: System.get_env("POSTGRES_DB"),
+  hostname: System.get_env("POSTGRES_HOST"),
+  pool_size: 15

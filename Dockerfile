@@ -13,6 +13,6 @@ ADD mix.exs mix.lock ./
 RUN mix deps.get
 
 ADD . ./
-RUN MIX_ENV=prod mix compile
+RUN mix compile
 
 CMD ["mix", "phx.server"]
