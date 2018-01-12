@@ -11,4 +11,6 @@ install:
   - docker build -t rschaden/battlemap .
 
 script:
-  - docker run -e MIX_ENV=test rschaden/battlemap mix test
+  - docker network create test
+  - docker run --network test --name postgres -d -e POSTGRES_PASSWORD=postgres mdillon/postgis
+  - docker run --network test -e MIX_ENV=test -e POSTGRES_HOST=postgres rschaden/battlemap mix test
