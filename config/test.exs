@@ -17,5 +17,5 @@ config :battlemap, Battlemap.Repo,
   username: "postgres",
   password: "postgres",
   database: "battlemap_test",
-  hostname: "localhost",
+  hostname: System.get_env("POSTGRES_HOST") || "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
