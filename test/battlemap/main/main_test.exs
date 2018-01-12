@@ -6,8 +6,8 @@ defmodule Battlemap.MainTest do
   describe "battles" do
     alias Battlemap.Main.Battle
 
-    @valid_attrs %{end_date: ~D[2010-04-17], location: "some location", name: "some name", start_date: ~D[2010-04-17]}
-    @update_attrs %{end_date: ~D[2011-05-18], location: "some updated location", name: "some updated name", start_date: ~D[2011-05-18]}
+    @valid_attrs %{end_date: ~D[2010-04-17], location: %Geo.Point{ coordinates: { 1, 1 }, srid: 4326 }, name: "some name", start_date: ~D[2010-04-17]}
+    @update_attrs %{end_date: ~D[2011-05-18], location: %Geo.Point{ coordinates: { 2, 2 }, srid: 4326 }, name: "some updated name", start_date: ~D[2011-05-18]}
     @invalid_attrs %{end_date: nil, location: nil, name: nil, start_date: nil}
 
     def battle_fixture(attrs \\ %{}) do
@@ -32,7 +32,7 @@ defmodule Battlemap.MainTest do
     test "create_battle/1 with valid data creates a battle" do
       assert {:ok, %Battle{} = battle} = Main.create_battle(@valid_attrs)
       assert battle.end_date == ~D[2010-04-17]
-      assert battle.location == "some location"
+      assert battle.location == %Geo.Point{ coordinates: {1, 1}, srid: 4326 }
       assert battle.name == "some name"
       assert battle.start_date == ~D[2010-04-17]
     end
@@ -46,7 +46,7 @@ defmodule Battlemap.MainTest do
       assert {:ok, battle} = Main.update_battle(battle, @update_attrs)
       assert %Battle{} = battle
       assert battle.end_date == ~D[2011-05-18]
-      assert battle.location == "some updated location"
+      assert battle.location == %Geo.Point{ coordinates: {2, 2}, srid: 4326 }
       assert battle.name == "some updated name"
       assert battle.start_date == ~D[2011-05-18]
     end
