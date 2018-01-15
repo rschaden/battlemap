@@ -1,12 +1,6 @@
+<link rel="stylesheet" href="<%= static_path(@conn, "/css/map.css") %>">
 <script src="<%= static_path(@conn, "/js/map.js") %>"></script>
 
-<style>
-	/* Always set the map height explicitly to define the size of the div
-	 * element that contains the map. */
-	#map {
-		height: 500px;
-	}
-</style>
 <h1>BattleMap<h1>
 <div id="map" class="map"></div>
 
