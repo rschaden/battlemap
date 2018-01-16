@@ -20,7 +20,8 @@ defmodule BattlemapWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", BattlemapWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", BattlemapWeb do
+    pipe_through :api
+    resources "/battles", BattleController, only: [:index]
+  end
 end
