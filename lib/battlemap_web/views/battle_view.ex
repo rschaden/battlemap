@@ -9,6 +9,10 @@ defmodule BattlemapWeb.BattleView do
   def render("battle.json", %{battle: battle}) do
     coordinates = battle.location.coordinates
 
-    %{lat: elem(coordinates, 1), lng: elem(coordinates, 0)}
+    %{id: battle.id,
+      name: battle.name,
+      start_date: battle.start_date,
+      end_date: battle.end_date,
+      location: %{lat: elem(coordinates, 1), lng: elem(coordinates, 0)}}
   end
 end
