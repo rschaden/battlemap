@@ -5,5 +5,5 @@
 <div id="map" class="map"></div>
 
 <script async defer
-	src="https://maps.googleapis.com/maps/api/js?key=<%= @api_key %>&callback=initMap">
+	src="https://maps.googleapis.com/maps/api/js?key=<%= @api_key %>&libraries=visualization&callback=initMap">
 </script>
