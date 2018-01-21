@@ -4,28 +4,19 @@ function initMap() {
     center: new google.maps.LatLng(47, 10)
   });
 
+
+
+
   $.get("api/battles", function(data) {
-    $.each(data["data"], function(_, battle) {
-      addMarker(map, battle);
+    let points = $.map(data["data"], function(battle) {
+      return new google.maps.LatLng(battle.lat, battle.lng);
     });
-  });
-}
 
-function addMarker(map, battle) {
-  let infowindow = new google.maps.InfoWindow({
-    content: '<div id="content">' +
-               '<h4>' + battle.name + '</h4>' +
-               '<p>' + battle.start_date + ' - ' + battle.end_date +  '</p>' +
-             '</div>'
-  });
-
-  let marker = new google.maps.Marker({
-    position: battle.location,
-    map: map,
-    title: battle.name
-  });
-
-  marker.addListener('click', function() {
-    infowindow.open(map, marker);
+		let heatmap = new google.maps.visualization.HeatmapLayer({
+			data: points,
+      map: map,
+			radius: 15,
+			opacity: 0.75
+		});
   });
 }
