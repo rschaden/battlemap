@@ -4,9 +4,6 @@ function initMap() {
     center: new google.maps.LatLng(47, 10)
   });
 
-
-
-
   $.get("api/battles", function(data) {
     let points = $.map(data["data"], function(battle) {
       coordinates = battle.location
