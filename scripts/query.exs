@@ -24,6 +24,7 @@ Enum.each(parsed_response["results"]["bindings"], fn battle ->
   location = Geo.WKT.decode("SRID=4326;" <> location_in_wkt)
 
   attributes = %{end_date: end_date, location: location, name: name, start_date: start_date}
+
   case Battlemap.Main.create_battle(attributes) do
     {:ok, battle} -> IO.puts("Created #{battle.name}")
     {:error, _} -> IO.puts("Error")
