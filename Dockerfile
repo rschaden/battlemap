@@ -1,4 +1,4 @@
-FROM bitwalker/alpine-elixir:1.5.2
+FROM bitwalker/alpine-elixir:1.7.1
 
 RUN apk --no-cache update && \
     apk add alpine-sdk nodejs nodejs-npm postgresql
