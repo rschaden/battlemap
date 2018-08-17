@@ -21,6 +21,14 @@ defmodule Battlemap.Main do
     Repo.all(Battle)
   end
 
+  def search_battles(earliest_date, latest_date) do
+    query = from(b in Battle,
+                 where: b.start_date >= ^Date.from_iso8601!(earliest_date),
+                 where: b.start_date <= ^Date.from_iso8601!(latest_date))
+
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single battle.
 
