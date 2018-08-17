@@ -7,7 +7,7 @@ use Mix.Config
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
 config :battlemap, BattlemapWeb.Endpoint,
-  http: [port: 4000],
+  http: [port: 8090],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
@@ -54,5 +54,5 @@ config :battlemap, Battlemap.Repo,
   username: "postgres",
   password: "postgres",
   database: "battlemap_dev",
-  hostname: "localhost",
+  hostname: "127.0.0.1",
   pool_size: 10

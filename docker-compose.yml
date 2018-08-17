@@ -1,0 +1,24 @@
+version: '3.3'
+
+services:
+  development: &default
+    build: .
+    tty: true
+    stdin_open: true
+    ports:
+      - "8090:8090"
+    network_mode: "host"
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+
+  postgres:
+    image: mdillon/postgis
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    network_mode: "host"
+    environment:
+      POSTGRES_PASSWORD: postgres
