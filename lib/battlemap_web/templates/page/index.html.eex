@@ -4,6 +4,10 @@
 <h1>BattleMap<h1>
 <div id="map" class="map"></div>
 
+<input type="text" id="earliestDate" value="1600-01-01"></input>
+<input type="text" id="latestDate" value="1700-01-01"></input>
+<input type="button" id="changeDate" value="Change"></input>
+
 <script async defer
 	src="https://maps.googleapis.com/maps/api/js?key=<%= @api_key %>&libraries=visualization&callback=initMap">
 </script>

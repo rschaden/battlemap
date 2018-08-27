@@ -1,60 +1,102 @@
+class Map {
+  constructor(map) {
+    this.map = map;
+    this.heatmap = null;
+    this.points = null;
+    this.markers = [];
+
+    this.map.addListener('zoom_changed', () => {
+      if(map.getZoom() >= 6) {
+        if (this.markers[0] && this.markers[0].map === null) {
+          this.heatmap.setMap(null);
+          $.each(this.markers, (_, marker) => {
+            marker.setMap(this.map);
+          });
+        }
+      } else {
+        if (this.heatmap.map === null) {
+          this.heatmap.setMap(this.map);
+          $.each(this.markers, (_, marker) => {
+            marker.setMap(null);
+          });
+        }
+      }
+    });
+  }
+
+  loadBattles(earliestDate, latestDate) {
+    let params = { "filter": { "earliestDate": earliestDate, "latestDate": latestDate } }
+    $.get("api/battles", params, (data) => {
+      this.drawHeatmap(data["data"]);
+      this.drawMarkers(data["data"]);
+    });
+  }
+
+  resetBattles() {
+    this.heatmap.setMap(null);
+    $.each(this.markers, (_, marker) => {
+      marker.setMap(null);
+    });
+  }
+
+  drawHeatmap(battles) {
+    this.points = $.map(battles, (battle) => {
+      let coordinates = battle.location
+      return new google.maps.LatLng(coordinates.lat, coordinates.lng);
+    });
+
+    this.heatmap = new google.maps.visualization.HeatmapLayer({
+      data: this.points,
+      map: this.map,
+      radius: 15,
+      opacity: 0.75
+    });
+  }
+
+  drawMarkers(battles) {
+    this.markers = $.map(battles, (battle) => {
+      let coordinates = battle.location;
+      return this.createMarker(battle);
+    });
+  }
+
+  createMarker(battle) {
+    let infowindow = new google.maps.InfoWindow({
+      content: '<div id="content">' +
+                 '<h4>' + battle.name + '</h4>' +
+                 '<p>' + battle.start_date + ' - ' + battle.end_date +  '</p>' +
+               '</div>'
+    });
+
+    let marker = new google.maps.Marker({
+      position: battle.location,
+      map: null,
+      title: battle.name
+    });
+
+    marker.addListener('click', () => {
+      infowindow.open(this.map, marker);
+    });
+
+    return marker;
+  }
+}
+
 function initMap() {
   let map = new google.maps.Map(document.getElementById('map'), {
     zoom: 4,
     center: new google.maps.LatLng(47, 10)
   });
 
-  $.get("api/battles", function(data) {
-    let points = $.map(data["data"], function(battle) {
-      coordinates = battle.location
-      return new google.maps.LatLng(coordinates.lat, coordinates.lng);
-    });
+  battleMap = new Map(map);
+  earliestDate = $('#earliestDate').val();
+  latestDate = $('#latestDate').val();
+  battleMap.loadBattles(earliestDate, latestDate);
 
-		let heatmap = new google.maps.visualization.HeatmapLayer({
-			data: points,
-      map: map,
-			radius: 15,
-			opacity: 0.75
-		});
-
-    let markers = $.map(data["data"], function(battle) {
-      coordinates = battle.location;
-      return createMarker(map, battle);
-    });
-
-    map.addListener('zoom_changed', function() {
-      if(map.getZoom() >= 6) {
-        heatmap.setMap(null);
-        $.each(markers, function(_, marker) {
-          marker.setMap(map);
-				});
-      } else {
-        heatmap.setMap(map);
-        $.each(markers, function(_, marker) {
-          marker.setMap(null);
-        });
-      }
-    });
-  });
-}
-
-function createMarker(map, battle) {
-  let infowindow = new google.maps.InfoWindow({
-    content: '<div id="content">' +
-               '<h4>' + battle.name + '</h4>' +
-               '<p>' + battle.start_date + ' - ' + battle.end_date +  '</p>' +
-             '</div>'
-  });
-
-  let marker = new google.maps.Marker({
-    position: battle.location,
-    map: null,
-    title: battle.name
-  });
-
-  marker.addListener('click', function() {
-    infowindow.open(map, marker);
-  });
-
-  return marker;
+  $('#changeDate').on('click', function() {
+    earliestDate = $('#earliestDate').val();
+    latestDate = $('#latestDate').val();
+    battleMap.resetBattles();
+    battleMap.loadBattles(earliestDate, latestDate);
+  })
 }
