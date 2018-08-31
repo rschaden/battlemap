@@ -33,7 +33,9 @@ class Map {
   }
 
   resetBattles() {
-    this.heatmap.setMap(null);
+    if (this.heatmap) {
+      this.heatmap.setMap(null);
+    }
     $.each(this.markers, (_, marker) => {
       marker.setMap(null);
     });
@@ -82,6 +84,13 @@ class Map {
   }
 }
 
+function refreshMap() {
+  earliestDate = $('#earliestDate').val();
+  latestDate = $('#latestDate').val();
+  battleMap.resetBattles();
+  battleMap.loadBattles(earliestDate, latestDate);
+}
+
 function initMap() {
   let map = new google.maps.Map(document.getElementById('map'), {
     zoom: 4,
@@ -89,14 +98,25 @@ function initMap() {
   });
 
   battleMap = new Map(map);
-  earliestDate = $('#earliestDate').val();
-  latestDate = $('#latestDate').val();
-  battleMap.loadBattles(earliestDate, latestDate);
+
+  refreshMap();
 
   $('#changeDate').on('click', function() {
-    earliestDate = $('#earliestDate').val();
-    latestDate = $('#latestDate').val();
-    battleMap.resetBattles();
-    battleMap.loadBattles(earliestDate, latestDate);
+    refreshMap();
+  })
+
+  $('#animate').on('click', function() {
+    for(let i = 0; i < 20; i++) {
+      setTimeout(() => {
+        year = 1000 + (i * 50);
+        earliestDate = year+ "-01-01";
+        latestDate = (year + 50) + "-01-01";
+
+        $('#earliestDate').val(earliestDate);
+        $('#latestDate').val(latestDate);
+
+        refreshMap();
+      }, i * 1000)
+    }
   })
 }
