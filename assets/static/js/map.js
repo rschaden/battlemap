@@ -28,7 +28,12 @@ class Map {
   }
 
   loadBattles(earliestDate, latestDate) {
-    let params = { "filter": { "earliestDate": earliestDate, "latestDate": latestDate } }
+    let params = {
+      "filter": {
+        "earliestDate": earliestDate.format("YYYY-MM-DD"),
+        "latestDate": latestDate.format("YYYY-MM-DD")
+      }
+    };
     $.get("api/battles", params, (data) => {
       this.drawHeatmap(data["data"]);
       this.drawMarkers(data["data"]);
@@ -92,8 +97,8 @@ class Map {
 }
 
 function refreshMap() {
-  earliestDate = $('#earliestDate').val();
-  latestDate = $('#latestDate').val();
+  let earliestDate = moment($("#earliestDate").val())
+  let latestDate = moment($("#latestDate").val())
   battleMap.resetBattles();
   battleMap.loadBattles(earliestDate, latestDate);
 }
@@ -110,20 +115,25 @@ function initMap() {
 
   $('#changeDate').on('click', function() {
     refreshMap();
-  })
+  });
 
   $('#animate').on('click', function() {
-    for(let i = 0; i < 20; i++) {
-      setTimeout(() => {
-        year = 1000 + (i * 50);
-        earliestDate = year+ "-01-01";
-        latestDate = (year + 50) + "-01-01";
+    let interval = 20;
+    let delay = (1000 / 40 * interval);
+    let earliestDate = moment("1000-01-01")
+    let latestDate = moment("1020-01-01")
 
-        $('#earliestDate').val(earliestDate);
-        $('#latestDate').val(latestDate);
+    for(let i = 0; i < (1000 / interval); i++) {
+      setTimeout(() => {
+
+        $('#earliestDate').val(earliestDate.format("YYYY-MM-DD"));
+        $('#latestDate').val(latestDate.format("YYYY-MM-DD"));
 
         refreshMap();
-      }, i * 1000)
+
+        earliestDate = earliestDate.add(interval, "years")
+        latestDate = latestDate.add(interval, "years")
+      }, i * delay)
     }
-  })
+  });
 }

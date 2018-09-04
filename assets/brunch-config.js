@@ -60,7 +60,8 @@ exports.config = {
     enabled: true,
     globals: {
       $: 'jquery',
-      jQuery: 'jquery'
+      jQuery: 'jquery',
+      moment: 'moment'
     }
   }
 };
