@@ -4,9 +4,11 @@ class Map {
     this.heatmap = null;
     this.points = null;
     this.markers = [];
+    this.heatMapVisible = true;
 
     this.map.addListener('zoom_changed', () => {
       if(map.getZoom() >= 6) {
+        this.heatMapVisible = false;
         if (this.markers[0] && this.markers[0].map === null) {
           this.heatmap.setMap(null);
           $.each(this.markers, (_, marker) => {
@@ -14,6 +16,7 @@ class Map {
           });
         }
       } else {
+        this.heatMapVisible = true;
         if (this.heatmap.map === null) {
           this.heatmap.setMap(this.map);
           $.each(this.markers, (_, marker) => {
@@ -47,9 +50,11 @@ class Map {
       return new google.maps.LatLng(coordinates.lat, coordinates.lng);
     });
 
+    let currentMap = this.heatMapVisible ? this.map : null;
+
     this.heatmap = new google.maps.visualization.HeatmapLayer({
       data: this.points,
-      map: this.map,
+      map: currentMap,
       radius: 15,
       opacity: 0.75
     });
@@ -70,9 +75,11 @@ class Map {
                '</div>'
     });
 
+    let currentMap = this.heatMapVisible ? null : this.map;
+
     let marker = new google.maps.Marker({
       position: battle.location,
-      map: null,
+      map: currentMap,
       title: battle.name
     });
 
